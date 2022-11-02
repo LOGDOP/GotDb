@@ -7,10 +7,7 @@ import ErrorMessage from '../errorMessage';
 
 export default class RandomChar extends Component {
 
-    constructor() {
-        super();
-        this.updateChar();
-    }
+    
     
 
     gotService = new gotService();
@@ -19,6 +16,15 @@ export default class RandomChar extends Component {
         char: {},
         loading: true,
         error: false
+    }
+
+    componentDidMount() {
+        this.updateChar();
+        this.timerId = setInterval(this.updateChar, 1500);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerId);
     }
 
     onCharLoaded = (char) => {
@@ -36,6 +42,7 @@ export default class RandomChar extends Component {
     }
 
     updateChar = () =>{
+        
         const id = Math.floor(Math.random()*140 + 25); // 25 - 140
         this.gotService.getCharacter(id)
         .then(this.onCharLoaded)
@@ -64,23 +71,23 @@ const View = ({char}) => {
     const {name, gender, born, died, culture} = char;
     return (
         <>
-         <h4>Random Character: {name}</h4>
+         <h4>Random Character: {name === "" ? "No Data" : name}</h4>
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item d-flex justify-content-between">
                         <span className="term">Gender </span>
-                        <span>{gender}</span>
+                        <span>{gender === "" ? "No Data" : gender}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between">
                         <span className="term">Born </span>
-                        <span>{born}</span>
+                        <span>{born === "" ? "No Data" : born}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between">
                         <span className="term">Died </span>
-                        <span>{died}</span>
+                        <span>{died  === "" ? "No Data" : died}</span>
                     </li>
                     <li className="list-group-item d-flex justify-content-between">
                         <span className="term">Culture </span>
-                        <span>{culture}</span>
+                        <span>{culture === "" ? "No Data" : culture}</span>
                     </li>
                 </ul>
         </>
